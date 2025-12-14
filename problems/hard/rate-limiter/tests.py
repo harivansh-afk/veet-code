@@ -6,19 +6,22 @@ from solution import RateLimiter
 class TestBasicCases:
     """Test basic functionality with typical inputs."""
 
-    def test_allow_within_limit(self):
-        """Test requests within the limit are allowed."""
+    def test_example_one(self):
+        """Test first example from problem description."""
         limiter = RateLimiter(max_requests=3, window_seconds=60)
         assert limiter.allow_request("user1", 0) == True
         assert limiter.allow_request("user1", 30) == True
         assert limiter.allow_request("user1", 45) == True
+        assert limiter.allow_request("user1", 50) == False
+        assert limiter.allow_request("user1", 61) == True
 
-    def test_block_over_limit(self):
-        """Test requests over limit are blocked."""
-        limiter = RateLimiter(max_requests=2, window_seconds=60)
+    def test_example_two(self):
+        """Test second example from problem description."""
+        limiter = RateLimiter(max_requests=2, window_seconds=10)
         assert limiter.allow_request("user1", 0) == True
-        assert limiter.allow_request("user1", 30) == True
-        assert limiter.allow_request("user1", 45) == False
+        assert limiter.allow_request("user2", 0) == True
+        assert limiter.allow_request("user1", 5) == True
+        assert limiter.allow_request("user1", 8) == False
 
     def test_multiple_users_independent(self):
         """Test each user has independent limits."""

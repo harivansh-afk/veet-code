@@ -72,7 +72,7 @@ def {function_name}({params}: {types}) -> {return_type}:
 
 ### Step 5: Write tests.py (CONSISTENT FORMAT)
 
-Follow this EXACT format for all tests:
+Follow this EXACT format for all tests. **CRITICAL: Use single-line assertions so the TUI can show inputs!**
 
 ```python
 """Tests for {problem_name}."""
@@ -85,15 +85,16 @@ class TestBasicCases:
 
     def test_example_one(self):
         """Test first example from problem description."""
-        assert {function_name}(...) == ...
+        # ALWAYS use single-line assert with function call inline
+        assert {function_name}(input1, input2) == expected_output
 
     def test_example_two(self):
         """Test second example from problem description."""
-        assert {function_name}(...) == ...
+        assert {function_name}(input1, input2) == expected_output
 
     def test_typical_case(self):
         """Test another common case."""
-        assert {function_name}(...) == ...
+        assert {function_name}(input1, input2) == expected_output
 
 
 class TestEdgeCases:
@@ -101,17 +102,23 @@ class TestEdgeCases:
 
     def test_empty_input(self):
         """Test with empty or minimal input."""
-        assert {function_name}(...) == ...
+        assert {function_name}([]) == []  # or appropriate empty case
 
     def test_single_element(self):
         """Test with single element input."""
-        assert {function_name}(...) == ...
+        assert {function_name}([1]) == expected
 
     def test_boundary_values(self):
         """Test boundary conditions."""
-        assert {function_name}(...) == ...
+        assert {function_name}(boundary_input) == expected
 
 
+# IMPORTANT TEST FORMAT RULES:
+# 1. ALWAYS use single-line assertions: assert func(args) == expected
+# 2. NEVER use: result = func(); assert result == expected (hides inputs in TUI)
+# 3. If output order doesn't matter, wrap in sorted(): assert sorted(func(...)) == sorted([...])
+# 4. Keep assertions simple - avoid 'or' conditions, use separate tests instead
+#
 # Test count by difficulty:
 # Easy: 4-5 tests (2 basic, 2-3 edge)
 # Medium: 6-8 tests (3 basic, 3-5 edge)

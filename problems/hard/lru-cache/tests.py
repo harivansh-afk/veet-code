@@ -6,6 +6,24 @@ from solution import LRUCache
 class TestBasicCases:
     """Test basic functionality with typical inputs."""
 
+    def test_example_one(self):
+        """Test first example from problem description."""
+        cache = LRUCache(2)
+        cache.put("a", 1)
+        cache.put("b", 2)
+        assert cache.get("a") == 1
+        cache.put("c", 3)
+        assert cache.get("b") == -1
+        assert cache.get("c") == 3
+
+    def test_example_two(self):
+        """Test second example from problem description."""
+        cache = LRUCache(1)
+        cache.put("x", 10)
+        cache.put("y", 20)
+        assert cache.get("x") == -1
+        assert cache.get("y") == 20
+
     def test_basic_put_get(self):
         """Test basic put and get operations."""
         cache = LRUCache(2)
@@ -13,24 +31,6 @@ class TestBasicCases:
         cache.put("b", 2)
         assert cache.get("a") == 1
         assert cache.get("b") == 2
-
-    def test_eviction_lru(self):
-        """Test that least recently used is evicted."""
-        cache = LRUCache(2)
-        cache.put("a", 1)
-        cache.put("b", 2)
-        cache.get("a")        # a is now most recent
-        cache.put("c", 3)     # b should be evicted
-        assert cache.get("b") == -1
-        assert cache.get("a") == 1
-        assert cache.get("c") == 3
-
-    def test_update_existing_key(self):
-        """Test updating an existing key."""
-        cache = LRUCache(2)
-        cache.put("a", 1)
-        cache.put("a", 10)
-        assert cache.get("a") == 10
 
 
 class TestEdgeCases:

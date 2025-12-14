@@ -40,6 +40,9 @@ class TestCase:
     name: str
     passed: bool
     error: str = ""
+    input_line: str = ""  # The function call with inputs
+    expected: str = ""
+    actual: str = ""
 
 
 @dataclass
@@ -131,15 +134,15 @@ def analyze_solution(solution_file: Path) -> SolutionStats:
 
 
 def parse_pytest_output(output: str) -> tuple[list[TestCase], float]:
-    """Parse pytest output to extract test results."""
+    """Parse pytest output to extract test results with detailed failure info."""
     test_cases: list[TestCase] = []
     total_time = 0.0
 
     # Strip ANSI codes for reliable parsing
     clean = strip_ansi(output)
 
-    # Match: tests.py::test_name PASSED or FAILED
-    for match in re.finditer(r"tests\.py::(\w+)\s+(PASSED|FAILED)", clean):
+    # Match: tests.py::ClassName::test_name or tests.py::test_name PASSED/FAILED
+    for match in re.finditer(r"tests\.py::(?:\w+::)?(\w+)\s+(PASSED|FAILED)", clean):
         test_cases.append(TestCase(
             name=match.group(1),
             passed=match.group(2) == "PASSED"
@@ -150,17 +153,73 @@ def parse_pytest_output(output: str) -> tuple[list[TestCase], float]:
     if time_match:
         total_time = float(time_match.group(1)) * 1000
 
-    # Extract errors for failed tests
-    for match in re.finditer(r"FAILED tests\.py::(\w+)\s*-\s*(\w+:.*?)(?=\n|$)", clean):
-        test_name, error = match.group(1), match.group(2).strip()[:100]
+    # Parse failure blocks for detailed info
+    # Split by test failure headers like "_______ TestClass.test_name _______"
+    failure_blocks = re.split(r"_{10,}\s+[\w.]+\s+_{10,}", clean)
+    
+    for block in failure_blocks[1:]:  # Skip the part before first failure
+        # Extract test name from the block
+        name_match = re.search(r"in\s+(\w+)\n", block)
+        if not name_match:
+            continue
+        test_name = name_match.group(1)
+        
+        # Find the input/function call from the test
+        # Look for either: "assert func(...) == ..." OR "result = func(...)" pattern
+        input_line = ""
+        lines_list = block.split('\n')
+        for i, line in enumerate(lines_list):
+            stripped = line.strip()
+            # Skip E lines (pytest error output)
+            if stripped.startswith('E'):
+                continue
+            # Pattern 1: Single-line assertion with function call
+            # e.g., "assert two_sum([2,7], 9) == [0,1]"
+            if stripped.startswith('assert') and '(' in stripped and '==' in stripped:
+                # Extract the function call part (left side of ==)
+                match = re.match(r'assert\s+(.+?)\s*==', stripped)
+                if match:
+                    call = match.group(1).strip()
+                    # Unwrap sorted/list/set wrappers to show actual call
+                    inner = re.search(r'(?:sorted|list|set|tuple)\((.+)\)$', call)
+                    input_line = inner.group(1) if inner else call
+                    break
+            # Pattern 2: Two-line format - "result = func(...)" followed by "assert result"
+            if '=' in stripped and not stripped.startswith('assert') and '(' in stripped:
+                # This looks like "result = func(...)"
+                match = re.search(r'=\s*(.+\(.*\))', stripped)
+                if match:
+                    input_line = match.group(1).strip()
+                    break
+        
+        # Extract actual and expected from AssertionError/assert lines
+        actual = ""
+        expected = ""
+        
+        # Find lines with assert comparisons (either "AssertionError: assert X == Y" or "E   assert X == Y")
+        for line in block.split('\n'):
+            if 'assert' in line and '==' in line and line.strip().startswith('E'):
+                # Split on == to get actual and expected
+                parts = line.split('==', 1)
+                # actual is after "assert " and before ==
+                actual_match = re.search(r'assert\s+(.+)$', parts[0])
+                if actual_match:
+                    actual = actual_match.group(1).strip()
+                if len(parts) > 1:
+                    expected = parts[1].strip()
+                break
+        
+        # Update the matching test case
         for tc in test_cases:
             if tc.name == test_name and not tc.passed:
-                tc.error = error
+                tc.input_line = input_line[:200]  # Truncate if too long
+                tc.expected = expected[:100]
+                tc.actual = actual[:100]
+                tc.error = f"expected {expected}, got {actual}" if expected else ""
                 break
 
     # Fallback: parse summary line for counts if no individual tests found
     if not test_cases:
-        # Match "1 passed" or "2 failed" etc
         passed_match = re.search(r"(\d+)\s+passed", clean)
         failed_match = re.search(r"(\d+)\s+failed", clean)
         if passed_match or failed_match:
@@ -376,26 +435,44 @@ class WatchScreen(Screen):
         # Status line
         time_str = f"{result.execution_time_ms:.0f}ms"
         if result.passed:
-            status = f"✓ {result.total} passed ({time_str})"
+            status = f"[green]✓ {result.total} passed[/green] ({time_str})"
             self.solved.add(self.problem.name)
             save_solved(self.solved_file, self.solved)
         else:
-            status = f"✗ {result.failed_count}/{result.total} failed ({time_str})"
+            status = f"[red]✗ {result.failed_count}/{result.total} failed[/red] ({time_str})"
         self.query_one("#summary-status", Static).update(status)
 
-        # Test list
+        # Test list with clean separation and input display
         lines = []
-        for i, tc in enumerate(result.test_cases, 1):
-            mark = "✓" if tc.passed else "✗"
-            lines.append(f"  {mark} {tc.name}")
-            if tc.error:
-                lines.append(f"    {tc.error[:80]}")
+        for tc in result.test_cases:
+            if tc.passed:
+                lines.append(f"[green]✓[/green] {tc.name}")
+            else:
+                lines.append(f"[red]✗[/red] [bold]{tc.name}[/bold]")
+                # Show input/expected/actual for failed tests
+                if tc.input_line:
+                    lines.append(f"  [dim]Input:[/dim]    {tc.input_line}")
+                if tc.expected:
+                    lines.append(f"  [dim]Expected:[/dim] [green]{tc.expected}[/green]")
+                if tc.actual:
+                    lines.append(f"  [dim]Got:[/dim]      [red]{tc.actual}[/red]")
+                lines.append("")  # Blank line for separation
+        
+        # Remove trailing blank line
+        while lines and lines[-1] == "":
+            lines.pop()
+        
         self.query_one("#test-summary", Static).update("\n".join(lines) or "No tests")
 
-        # Verbose output
+        # Verbose output with clean formatting
         out = self.query_one("#output", RichLog)
         out.clear()
-        out.write(result.output or "No output")
+        if result.output:
+            # Add visual separators for readability
+            out.write("[dim]─" * 60 + "[/dim]")
+            out.write(result.output)
+        else:
+            out.write("No output")
 
     def action_back(self) -> None:
         self.stop_watcher()

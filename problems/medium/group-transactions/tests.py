@@ -43,8 +43,7 @@ class TestEdgeCases:
             {"amount": 10, "category": "Food", "date": "2024-01-01"},
             {"amount": 20, "category": "food", "date": "2024-01-02"}
         ]
-        result = group_transactions(txns)
-        assert result == {"Food": 10, "food": 20}
+        assert group_transactions(txns) == {"Food": 10, "food": 20}
 
     def test_many_categories(self):
         """Test with many different categories."""
