@@ -52,7 +52,7 @@ def list() -> None:
     
     for p in problems:
         mark = "✓" if p.name in solved else " "
-        diff = {"easy": "E", "medium": "M", "hard": "H"}.get(p.difficulty, "?")
+        diff = {"easy": "Easy", "medium": "Medium", "hard": "Hard"}.get(p.difficulty, "?")
         typer.echo(f"{mark} [{diff}] {p.name}")
 
 
@@ -122,7 +122,7 @@ def open(
     if not name:
         typer.echo("Available problems:\n")
         for i, p in enumerate(problems, 1):
-            diff = {"easy": "E", "medium": "M", "hard": "H"}.get(p.difficulty, "?")
+            diff = {"easy": "Easy", "medium": "Medium", "hard": "Hard"}.get(p.difficulty, "?")
             typer.echo(f"  {i}. [{diff}] {p.name}")
         typer.echo()
         choice = typer.prompt("Enter number or name")

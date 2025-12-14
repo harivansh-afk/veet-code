@@ -256,7 +256,7 @@ class ProblemListScreen(Screen):
             return
 
         for p in self.problems:
-            diff_char = {"easy": "E", "medium": "M", "hard": "H"}.get(p.difficulty, "?")
+            diff_char = {"easy": "Easy", "medium": "Medium", "hard": "Hard"}.get(p.difficulty, "?")
             check = "✓ " if p.name in self.solved else "  "
             ol.add_option(Option(f"{check}[{diff_char}] {p.name}", id=p.name))
 
