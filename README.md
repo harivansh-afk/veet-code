@@ -54,9 +54,11 @@ uv sync
 
 ```bash
 veet                    # Launch TUI
+veet open               # Open a problem in $EDITOR (vim)
+veet open two-sum       # Open specific problem
 veet list               # List all problems  
 veet install-commands   # Install Claude slash commands
-veet path               # Show install location
+cd $(veet problems-dir) # cd to problems folder
 ```
 
 ## Generate Problems

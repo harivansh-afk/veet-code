@@ -96,10 +96,66 @@ def uninstall_commands() -> None:
 
 
 @app.command()
+def open(
+    name: str = typer.Argument(None, help="Problem name (e.g., two-sum)"),
+) -> None:
+    """Open a problem in your editor ($EDITOR or vim)."""
+    import os
+    import subprocess
+    from veetcode.app import scan_problems
+    
+    repo = find_repo_root()
+    problems = scan_problems(repo / "problems")
+    
+    if not problems:
+        typer.echo("No problems found.")
+        raise typer.Exit(1)
+    
+    # If no name given, show list and prompt
+    if not name:
+        typer.echo("Available problems:\n")
+        for i, p in enumerate(problems, 1):
+            diff = {"easy": "E", "medium": "M", "hard": "H"}.get(p.difficulty, "?")
+            typer.echo(f"  {i}. [{diff}] {p.name}")
+        typer.echo()
+        choice = typer.prompt("Enter number or name")
+        
+        # Check if it's a number
+        try:
+            idx = int(choice) - 1
+            if 0 <= idx < len(problems):
+                name = problems[idx].name
+            else:
+                typer.echo("Invalid number")
+                raise typer.Exit(1)
+        except ValueError:
+            name = choice
+    
+    # Find the problem
+    problem = next((p for p in problems if p.name == name), None)
+    if not problem:
+        typer.echo(f"Problem not found: {name}")
+        raise typer.Exit(1)
+    
+    solution_file = problem.path / "solution.py"
+    editor = os.environ.get("EDITOR", "vim")
+    
+    typer.echo(f"Opening {solution_file} in {editor}...")
+    subprocess.run([editor, str(solution_file)])
+
+
+@app.command()
 def path() -> None:
     """Show veetcode installation path."""
     repo = find_repo_root()
     typer.echo(repo)
+
+
+@app.command()
+def problems_dir() -> None:
+    """Print the problems directory path (useful for cd)."""
+    repo = find_repo_root()
+    typer.echo(repo / "problems")
 
 
 if __name__ == "__main__":
