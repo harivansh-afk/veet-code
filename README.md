@@ -2,6 +2,8 @@
 
 Built for vim users who enjoy claude code, ghostty panes and TUIs
 
+<img width="1800" height="1169" alt="image" src="https://github.com/user-attachments/assets/d28c2acb-edcb-4d14-8155-e09d65d14a6b" />
+
 **Requires:** [uv](https://docs.astral.sh/uv/) and [Claude Code](https://claude.ai/code) (for problem generation)
 
 - Browse problems by difficulty (easy/medium/hard)
