@@ -10,9 +10,15 @@ After the user has solved a problem (or given up), explain the optimal solution 
 ## Problem
 Problem name: $ARGUMENTS (if empty, ask which problem)
 
+## Find the problem
+First, find the veetcode problems directory:
+```bash
+VEET_DIR=$(veet problems-dir 2>/dev/null || echo "$HOME/.veetcode/problems")
+```
+
 ## Process
 
-1. Read their solution.py to see their implementation
+1. Read their solution.py from $VEET_DIR/*/{problem-name}/ to see their implementation
 2. Provide explanation covering:
 
 ### For a CORRECT solution:

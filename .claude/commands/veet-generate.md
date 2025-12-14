@@ -31,9 +31,13 @@ Before writing any files, mentally design:
 - Edge cases
 
 ### Step 3: Create Directory
+First, find the veetcode problems directory:
 ```bash
-mkdir -p problems/{difficulty}/{problem-name}
+VEET_DIR=$(veet problems-dir 2>/dev/null || echo "$HOME/.veetcode/problems")
+mkdir -p "$VEET_DIR/{difficulty}/{problem-name}"
 ```
+
+All file operations should use `$VEET_DIR/{difficulty}/{problem-name}/` as the base path.
 
 ### Step 4: Write solution.py (SKELETON ONLY)
 Write ONLY the skeleton - never include the solution!
@@ -119,7 +123,7 @@ class TestEdgeCases:
 You MUST verify the tests are solvable before telling the user. Run this verification using inline Python - DO NOT write the solution to any file:
 
 ```bash
-cd problems/{difficulty}/{problem-name} && python -c "
+cd "$VEET_DIR/{difficulty}/{problem-name}" && python -c "
 import sys
 from types import ModuleType
 
@@ -155,9 +159,9 @@ Only after verification passes, tell the user:
 ```
 ✅ Problem created and verified!
 
-📁 Location: problems/{difficulty}/{problem-name}/
-📝 Edit: solution.py
-🚀 Run: uv run veetcode → select "{problem-name}"
+📁 Location: $VEET_DIR/{difficulty}/{problem-name}/
+📝 Open: veet open {problem-name}
+🚀 Run: veet → select "{problem-name}"
 
 Good luck!
 ```

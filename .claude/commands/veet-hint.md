@@ -38,5 +38,10 @@ Problem name: $ARGUMENTS (if empty, ask which problem they need help with)
 - Ask if they want more specific hints after each level
 - Encourage them to try implementing after each hint
 
-## Read the problem first
-Read: problems/*/$ARGUMENTS/solution.py (find the matching problem directory)
+## Find the problem
+First, find the veetcode problems directory:
+```bash
+VEET_DIR=$(veet problems-dir 2>/dev/null || echo "$HOME/.veetcode/problems")
+```
+
+Then read: $VEET_DIR/*/$ARGUMENTS/solution.py (find the matching problem directory)

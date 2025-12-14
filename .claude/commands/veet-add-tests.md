@@ -11,9 +11,15 @@ Add additional test cases to an existing problem to make it more challenging or 
 ## Problem
 Problem name: $ARGUMENTS (if empty, ask which problem)
 
+## Find the problem
+First, find the veetcode problems directory:
+```bash
+VEET_DIR=$(veet problems-dir 2>/dev/null || echo "$HOME/.veetcode/problems")
+```
+
 ## Process
 
-1. Read the existing solution.py and tests.py for the problem
+1. Read the existing solution.py and tests.py from $VEET_DIR/*/{problem-name}/
 2. Analyze what edge cases are NOT covered
 3. Ask the user what kind of tests they want:
    - Edge cases (empty, single element, boundaries)
