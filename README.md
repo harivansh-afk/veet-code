@@ -1,6 +1,8 @@
 # Veetcode
 
-Built for people vim users who enjoy claude code, ghostty panes and TUIs
+Built for vim users who enjoy claude code, ghostty panes and TUIs
+
+**Requires:** [uv](https://docs.astral.sh/uv/) and [Claude Code](https://claude.ai/code) (for problem generation)
 
 - Browse problems by difficulty (easy/medium/hard)
 - Auto-run tests on file write
@@ -31,13 +33,22 @@ uv sync
 
 </details>
 
+## Quick Start
+
+```bash
+veet                    # Launch TUI (first time: no problems yet)
+# In Claude: /veet-generate easy arrays
+veet open               # Opens solution.py in vim/nvim
+# Edit, save → tests auto-run in TUI
+```
+
 ## Workflow
 
-1. `./veet` — opens problem list
-2. Select a problem, press Enter
-3. Edit `solution.py` in your editor
-4. Save — tests run automatically
-5. Repeat
+1. Generate a problem: `/veet-generate` (in Claude Code)
+2. `veet` — opens TUI with problem list
+3. Select a problem, press Enter
+4. `veet open` — edit solution in your editor (nvim/vim)
+5. Save — tests run automatically in TUI
 
 ## Keys
 
