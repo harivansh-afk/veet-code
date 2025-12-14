@@ -5,9 +5,8 @@ Built for people who enjoy programming, vim, claude code, ghostty panes and TUIs
 ## Features
 
 - Browse problems by difficulty (easy/medium/hard)
-- Auto-run tests when you save your solution
-- Visual solved indicators
-- Clean, minimal TUI
+- Auto-run tests on file write
+- Claude code slash command to generate problems, tests on demand
 
 ## Installation
 
@@ -37,7 +36,4 @@ veetcode
 3. Open `problems/<difficulty>/<name>/solution.py` in your editor
 4. Implement the solution
 5. Write file - tests run automatically
-
-## Generating Problems
-
-Problems are generated via Claude Code slash commands
+6. Generate more problems :)
