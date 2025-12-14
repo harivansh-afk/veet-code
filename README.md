@@ -23,8 +23,9 @@ veet
 
 ```bash
 git clone https://github.com/harivansh-afk/veet-code.git
-cd veetcode
+cd veet-code
 uv sync
+./veet install-commands  # optional: install Claude slash commands
 ./veet
 ```
 
@@ -49,14 +50,23 @@ uv sync
 | `q`      | Quit            |
 | `Ctrl+P` | Command palette |
 
+## CLI Commands
+
+```bash
+veet                    # Launch TUI
+veet list               # List all problems  
+veet install-commands   # Install Claude slash commands
+veet path               # Show install location
+```
+
 ## Generate Problems
 
-Use Claude Code slash commands in `.claude/commands/`:
+Use Claude slash commands (works anywhere after install):
 
-- `/generate` — create a new problem
-- `/hint` — get a hint
-- `/explain` — explain the solution
-- `/add-tests` — add more test cases
+- `/veet-generate` — create a new problem
+- `/veet-hint` — get a hint
+- `/veet-explain` — explain the solution
+- `/veet-add-tests` — add more test cases
 
 ## Themes
 
