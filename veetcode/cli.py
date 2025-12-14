@@ -105,11 +105,18 @@ def open(
     from veetcode.app import scan_problems
     
     repo = find_repo_root()
-    problems = scan_problems(repo / "problems")
+    problems_dir = repo / "problems"
+    problems_dir.mkdir(parents=True, exist_ok=True)
+    problems = scan_problems(problems_dir)
     
+    editor = os.environ.get("EDITOR", "vim")
+    
+    # No problems - open the problems directory
     if not problems:
-        typer.echo("No problems found.")
-        raise typer.Exit(1)
+        typer.echo(f"No problems yet. Opening {problems_dir} in {editor}...")
+        typer.echo("\nGenerate problems with: /veet-generate (in Claude)")
+        subprocess.run([editor, str(problems_dir)])
+        return
     
     # If no name given, show list and prompt
     if not name:
@@ -138,8 +145,6 @@ def open(
         raise typer.Exit(1)
     
     solution_file = problem.path / "solution.py"
-    editor = os.environ.get("EDITOR", "vim")
-    
     typer.echo(f"Opening {solution_file} in {editor}...")
     subprocess.run([editor, str(solution_file)])
 
