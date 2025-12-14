@@ -1,0 +1,143 @@
+/* Veetcode TUI - Minimal, clean design */
+
+Screen {
+    background: $surface;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Problem List Screen */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+#main-container {
+    width: 100%;
+    height: 1fr;
+    padding: 1 2;
+}
+
+#title {
+    width: 100%;
+    height: auto;
+    text-align: center;
+    padding: 1;
+    color: $text-muted;
+}
+
+#problem-list {
+    width: 100%;
+    height: 1fr;
+    border: solid $primary-muted;
+    padding: 1;
+}
+
+OptionList {
+    scrollbar-gutter: stable;
+}
+
+OptionList:focus {
+    border: solid $accent;
+}
+
+OptionList > .option-list--option-highlighted {
+    background: $primary 20%;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Watch Screen */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+#watch-container {
+    width: 100%;
+    height: 1fr;
+    padding: 0 1;
+}
+
+#problem-title {
+    width: 100%;
+    height: auto;
+    text-align: center;
+    padding: 1;
+    color: $text;
+}
+
+/* Info Row */
+#info-row {
+    width: 100%;
+    height: auto;
+    min-height: 6;
+    max-height: 14;
+    margin: 0 0 1 0;
+}
+
+/* Summary Pane - Left */
+#summary-pane {
+    width: 2fr;
+    height: 100%;
+    border: solid $primary-muted;
+    padding: 0;
+}
+
+#summary-header {
+    display: none;
+}
+
+#summary-status {
+    width: 100%;
+    height: auto;
+    padding: 1;
+    text-align: left;
+}
+
+#summary-scroll {
+    width: 100%;
+    height: auto;
+    max-height: 8;
+    padding: 0 1;
+}
+
+#test-summary {
+    width: 100%;
+    height: auto;
+}
+
+/* Stats Pane - Right */
+#stats-pane {
+    width: 1fr;
+    height: 100%;
+    border: solid $primary-muted;
+    padding: 0;
+    margin-left: 1;
+}
+
+#stats-header {
+    display: none;
+}
+
+#stats-content {
+    width: 100%;
+    height: auto;
+    padding: 1;
+    color: $text-muted;
+}
+
+/* Verbose Output */
+#output-header {
+    display: none;
+}
+
+#output {
+    width: 100%;
+    height: 1fr;
+    min-height: 6;
+    border: solid $primary-muted;
+    padding: 1;
+    scrollbar-gutter: stable;
+}
+
+#output:focus {
+    border: solid $accent;
+}
+
+RichLog {
+    overflow-x: hidden;
+    text-wrap: wrap;
+}
