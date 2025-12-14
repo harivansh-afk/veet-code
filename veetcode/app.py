@@ -509,12 +509,14 @@ class VeetcodeApp(App):
 
     @work(thread=True)
     def auto_update(self) -> None:
-        """Silently update veetcode in background."""
+        """Silently update veetcode in background, preserving user solutions."""
         import subprocess
         repo = Path(__file__).parent.parent
         try:
+            # Use --autostash to preserve local changes (user solutions)
+            # and --rebase to cleanly apply updates
             subprocess.run(
-                ["git", "pull", "--quiet"],
+                ["git", "pull", "--rebase", "--autostash", "--quiet"],
                 cwd=repo,
                 capture_output=True,
                 timeout=10,
