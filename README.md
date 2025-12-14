@@ -6,19 +6,29 @@ Built for people vim users who enjoy claude code, ghostty panes and TUIs
 - Auto-run tests on file write
 - Claude code slash command to generate problems, tests on demand
 
-## Installation
+## Install
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/harivansh-afk/veetcode/main/install.sh | bash
+```
+
+Then run:
+
+```bash
+veet
+```
+
+<details>
+<summary>Manual install</summary>
 
 ```bash
 git clone https://github.com/harivansh-afk/veetcode.git
 cd veetcode
 uv sync
-```
-
-## Run
-
-```bash
 ./veet
 ```
+
+</details>
 
 ## Workflow
 
