@@ -6,6 +6,8 @@ allowed-tools: Write, Bash(mkdir:*)
 
 # Generate a New Practice Problem
 
+**Reference**: @.claude/problem-examples.md for consistent formatting and quality examples.
+
 You are generating a practical implementation problem for veetcode - a terminal-based coding practice tool.
 
 ## Arguments Provided
