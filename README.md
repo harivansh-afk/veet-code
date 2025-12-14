@@ -68,6 +68,7 @@ veet                    # Launch TUI
 veet open               # Open a problem in $EDITOR (vim)
 veet open two-sum       # Open specific problem
 veet list               # List all problems  
+veet update             # Update to latest version
 veet install-commands   # Install Claude slash commands
 cd $(veet problems-dir) # cd to problems folder
 ```

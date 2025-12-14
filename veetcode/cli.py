@@ -163,5 +163,43 @@ def problems_dir() -> None:
     typer.echo(repo / "problems")
 
 
+@app.command()
+def update() -> None:
+    """Update veetcode to the latest version."""
+    import subprocess
+    
+    repo = find_repo_root()
+    typer.echo(f"Updating veetcode in {repo}...")
+    
+    # Git pull
+    result = subprocess.run(
+        ["git", "pull"],
+        cwd=repo,
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode != 0:
+        typer.echo(f"Git pull failed: {result.stderr}")
+        raise typer.Exit(1)
+    
+    typer.echo(result.stdout.strip())
+    
+    # Sync dependencies
+    typer.echo("Syncing dependencies...")
+    result = subprocess.run(
+        ["uv", "sync"],
+        cwd=repo,
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode != 0:
+        typer.echo(f"uv sync failed: {result.stderr}")
+        raise typer.Exit(1)
+    
+    typer.echo("✓ veetcode updated!")
+
+
 if __name__ == "__main__":
     app()
