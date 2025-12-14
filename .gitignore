@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+thoughts/
+
+# UV
+.uv/
+uv.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Project specific
+problems/
+.solved.json
+
+# OS
+.DS_Store
+Thumbs.db
