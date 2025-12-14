@@ -1,8 +1,6 @@
 # Veetcode
 
-Built for people who enjoy programming, vim, claude code, ghostty panes and TUIs
-
-## Features
+Built for people vim users who enjoy claude code, ghostty panes and TUIs
 
 - Browse problems by difficulty (easy/medium/hard)
 - Auto-run tests on file write
@@ -11,29 +9,45 @@ Built for people who enjoy programming, vim, claude code, ghostty panes and TUIs
 ## Installation
 
 ```bash
-# Clone the repo
 git clone https://github.com/harivansh-afk/veetcode.git
 cd veetcode
-
-# Install with uv
 uv sync
 ```
 
-## Usage
+## Run
 
 ```bash
-# Launch the TUI
-uv run veetcode
-
-# Or if installed globally
-veetcode
+./veet
 ```
 
-### Workflow
+## Workflow
 
-1. Launch the TUI
-2. Select a problem with Enter
-3. Open `problems/<difficulty>/<name>/solution.py` in your editor
-4. Implement the solution
-5. Write file - tests run automatically
-6. Generate more problems :)
+1. `./veet` — opens problem list
+2. Select a problem, press Enter
+3. Edit `solution.py` in your editor
+4. Save — tests run automatically
+5. Repeat
+
+## Keys
+
+|   Key    | Action          |
+|----------|-----------------|
+| `j/k`    | Navigate        |
+| `Enter`  | Select          |
+| `Esc`    | Back            |
+| `r`      | Rerun tests     |
+| `q`      | Quit            |
+| `Ctrl+P` | Command palette |
+
+## Generate Problems
+
+Use Claude Code slash commands in `.claude/commands/`:
+
+- `/generate` — create a new problem
+- `/hint` — get a hint
+- `/explain` — explain the solution
+- `/add-tests` — add more test cases
+
+## Themes
+
+Gruvbox by default. Change via `Ctrl+P` → "Change theme".
