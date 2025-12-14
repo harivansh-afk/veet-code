@@ -1,83 +1,54 @@
 ---
 description: Generate a new practice problem with tests
 argument-hint: [difficulty] [topic]
-allowed-tools: Write, Bash(mkdir:*)
+allowed-tools: Write, Bash(mkdir:*), Bash(cd:*), Bash(python:*), Bash(rm:*)
 ---
 
 # Generate a New Practice Problem
 
 **Reference**: @.claude/problem-examples.md for consistent formatting and quality examples.
 
-You are generating a practical implementation problem for veetcode - a terminal-based coding practice tool.
+You are generating a practical implementation problem for veetcode.
 
 ## Arguments Provided
 - Difficulty: $1 (if empty, ask user to choose: easy, medium, or hard)
 - Topic: $2 (if empty, ask user what concept/topic they want to practice)
 
-## Problem Style Guide
+## Generation Workflow
 
-Generate **practical implementation** problems, NOT abstract LeetCode puzzles:
+### Step 1: Gather Requirements
+If arguments not provided, ask user:
+1. Difficulty: easy, medium, or hard
+2. Topic/concept they want to practice
+3. Confirm with a one-line problem summary before proceeding
 
-### DO:
-- Use real-world business context (e.g., "You are building a payment system...")
-- Provide clear function signatures with type hints
-- Include 2-3 concrete examples with explanations
-- List explicit constraints
-- Focus on practical skills: data transformation, validation, API-like operations
+### Step 2: Design the Problem (in your head)
+Before writing any files, mentally design:
+- The problem scenario (real-world context)
+- Function signature with types
+- The ACTUAL SOLUTION (keep this secret - never write to files)
+- Test cases that verify the solution
+- Edge cases
 
-### DON'T:
-- Create pure algorithmic puzzles without context
-- Use abstract mathematical framing
-- Make problems that feel like textbook exercises
-
-## Difficulty Calibration
-
-**Easy** (15-25 min):
-- Single data structure (list, dict, set)
-- 1-2 core concepts
-- 3-4 test cases
-- ~20-30 lines solution
-
-**Medium** (30-40 min):
-- Multiple data structures
-- 3-4 concepts (sorting, hash maps, two pointers)
-- 5-6 test cases including edge cases
-- ~40-60 lines solution
-
-**Hard** (45-60 min):
-- Custom classes or complex data structures
-- 5+ concepts (DP, graphs, sliding window + state)
-- 7-10 test cases with tricky edge cases
-- ~80+ lines solution
-
-## Output Format
-
-### 1. First, confirm with the user:
-- The difficulty level
-- The topic/concept
-- A one-line problem summary
-
-### 2. Generate the problem name
-Create a kebab-case name (e.g., `validate-transactions`, `rate-limiter`, `word-frequency`)
-
-### 3. Create the directory
+### Step 3: Create Directory
 ```bash
 mkdir -p problems/{difficulty}/{problem-name}
 ```
 
-### 4. Create solution.py
+### Step 4: Write solution.py (SKELETON ONLY)
+Write ONLY the skeleton - never include the solution!
 
-Structure:
 ```python
 """
 {Problem Title}
 
-{Story-based description in 2-3 sentences with real-world context}
+{Story-based description in 2-3 sentences with real-world context.
+Frame it as a real task: "You're building...", "Your team needs...", etc.}
 
 Example 1:
     Input: {param1} = {value1}, {param2} = {value2}
     Output: {expected}
-    Explanation: {why this is the answer}
+    Explanation: {brief explanation}
 
 Example 2:
     Input: {param1} = {value1}, {param2} = {value2}
@@ -90,59 +61,148 @@ Constraints:
 """
 
 
-def {function_name}({params_with_types}) -> {return_type}:
-    """{One-line docstring describing what to return}."""
+def {function_name}({params}: {types}) -> {return_type}:
+    """{One-line description of what to return}."""
     pass  # Your implementation here
 ```
 
-### 5. Create tests.py
+### Step 5: Write tests.py (CONSISTENT FORMAT)
 
-Structure:
+Follow this EXACT format for all tests:
+
 ```python
+"""Tests for {problem_name}."""
 import pytest
 from solution import {function_name}
 
 
-def test_basic_case():
-    """Test the example from the problem description."""
-    assert {function_name}(...) == ...
+class TestBasicCases:
+    """Test basic functionality with typical inputs."""
+
+    def test_example_one(self):
+        """Test first example from problem description."""
+        assert {function_name}(...) == ...
+
+    def test_example_two(self):
+        """Test second example from problem description."""
+        assert {function_name}(...) == ...
+
+    def test_typical_case(self):
+        """Test another common case."""
+        assert {function_name}(...) == ...
 
 
-def test_another_case():
-    """Test another typical case."""
-    assert {function_name}(...) == ...
+class TestEdgeCases:
+    """Test edge cases and boundary conditions."""
+
+    def test_empty_input(self):
+        """Test with empty or minimal input."""
+        assert {function_name}(...) == ...
+
+    def test_single_element(self):
+        """Test with single element input."""
+        assert {function_name}(...) == ...
+
+    def test_boundary_values(self):
+        """Test boundary conditions."""
+        assert {function_name}(...) == ...
 
 
-def test_edge_case_empty():
-    """Test empty or minimal input."""
-    assert {function_name}(...) == ...
-
-
-def test_edge_case_boundary():
-    """Test boundary conditions."""
-    assert {function_name}(...) == ...
-
-
-# Add more tests based on difficulty:
-# Easy: 3-4 tests
-# Medium: 5-6 tests
-# Hard: 7-10 tests
+# Test count by difficulty:
+# Easy: 4-5 tests (2 basic, 2-3 edge)
+# Medium: 6-8 tests (3 basic, 3-5 edge)
+# Hard: 8-12 tests (4 basic, 4-8 edge)
 ```
 
-## Example Problems by Topic
+### Step 6: VERIFY TESTS WORK (CRITICAL)
 
-**Arrays/Lists**: frequency counting, deduplication, sliding window, two pointers
-**Strings**: parsing, validation, transformation, pattern matching
-**Hash Maps**: grouping, caching, lookup optimization
-**Trees/Graphs**: traversal, path finding, hierarchy operations
-**OOP Design**: class design, state management, encapsulation
-**Data Processing**: ETL operations, aggregation, filtering pipelines
+You MUST verify the tests are solvable before telling the user. Run this verification using inline Python - DO NOT write the solution to any file:
 
-## After Generation
+```bash
+cd problems/{difficulty}/{problem-name} && python -c "
+import sys
+from types import ModuleType
 
-Tell the user:
-1. The path to their new problem: `problems/{difficulty}/{problem-name}/`
-2. How to start practicing: `uv run veetcode` then select the problem
-3. The file to edit: `solution.py`
+# Define the actual solution INLINE (user cannot see this)
+def {function_name}({params}):
+    # YOUR SOLUTION HERE - implement it fully
+    ...
 
-Now, let's generate a problem! If difficulty or topic weren't provided, ask the user to choose.
+# Create a fake 'solution' module
+solution_module = ModuleType('solution')
+solution_module.{function_name} = {function_name}
+sys.modules['solution'] = solution_module
+
+# Run pytest
+import pytest
+exit_code = pytest.main(['tests.py', '-v'])
+sys.exit(exit_code)
+"
+```
+
+If tests FAIL:
+- Fix the tests (not the solution approach)
+- Re-run verification
+- Do NOT proceed until all tests pass
+
+If tests PASS:
+- Proceed to tell user the problem is ready
+
+### Step 7: Confirm to User
+
+Only after verification passes, tell the user:
+
+```
+✅ Problem created and verified!
+
+📁 Location: problems/{difficulty}/{problem-name}/
+📝 Edit: solution.py
+🚀 Run: uv run veetcode → select "{problem-name}"
+
+Good luck!
+```
+
+## Problem Style Guide
+
+### DO:
+- Real-world business context ("You're building a payment API...")
+- Clear function signatures with type hints
+- 2-3 concrete examples with explanations
+- Explicit constraints
+- Practical skills: data transformation, validation, business logic
+
+### DON'T:
+- Abstract algorithmic puzzles without context
+- Mathematical framing ("Given an array of integers...")
+- Textbook exercise style
+- Overly complex for the difficulty level
+
+## Difficulty Calibration
+
+**Easy** (15-25 min):
+- Single data structure (list, dict, set)
+- 1-2 concepts
+- 4-5 test cases
+- ~20-30 line solution
+
+**Medium** (30-40 min):
+- Multiple data structures
+- 3-4 concepts
+- 6-8 test cases
+- ~40-60 line solution
+
+**Hard** (45-60 min):
+- Custom classes or complex structures
+- 5+ concepts
+- 8-12 test cases
+- ~80+ line solution
+
+## Topic Ideas
+
+- **Arrays**: frequency counting, deduplication, sliding window, two pointers
+- **Strings**: parsing, validation, transformation, pattern matching
+- **Hash Maps**: grouping, caching, lookup optimization, counting
+- **Classes**: state management, encapsulation, business entities
+- **Data Processing**: filtering, aggregation, transformation pipelines
+
+Now, let's generate a problem! Ask for difficulty and topic if not provided.

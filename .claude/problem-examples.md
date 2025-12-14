@@ -2,6 +2,8 @@
 
 Reference examples for generating consistent, high-quality practice problems.
 
+---
+
 ## Easy Example: Email Validator
 
 **solution.py**:
@@ -9,15 +11,14 @@ Reference examples for generating consistent, high-quality practice problems.
 """
 Email Validator
 
-You're building a user registration system. Before storing emails in your
-database, you need to validate that they follow the correct format.
-
-Write a function that checks if an email address is valid.
+You're building a user registration system for an e-commerce platform.
+Before storing customer emails in your database, you need to validate
+that they follow the correct format to prevent data quality issues.
 
 Example 1:
     Input: email = "user@example.com"
     Output: True
-    Explanation: Has username, @, domain with dot
+    Explanation: Has username, single @, domain with dot
 
 Example 2:
     Input: email = "invalid-email"
@@ -31,8 +32,8 @@ Example 3:
 
 Constraints:
     - Input is always a string
-    - Valid emails have: non-empty username, exactly one @, domain with at least one dot
-    - No spaces allowed anywhere in the email
+    - Valid: non-empty username, exactly one @, domain with at least one dot
+    - No spaces allowed anywhere
 """
 
 
@@ -43,32 +44,45 @@ def is_valid_email(email: str) -> bool:
 
 **tests.py**:
 ```python
+"""Tests for email-validator."""
 import pytest
 from solution import is_valid_email
 
 
-def test_valid_simple():
-    assert is_valid_email("user@example.com") == True
+class TestBasicCases:
+    """Test basic functionality with typical inputs."""
+
+    def test_valid_simple_email(self):
+        """Test standard email format."""
+        assert is_valid_email("user@example.com") == True
+
+    def test_valid_with_subdomain(self):
+        """Test email with subdomain."""
+        assert is_valid_email("user.name@mail.example.co.uk") == True
+
+    def test_invalid_missing_at(self):
+        """Test email without @ symbol."""
+        assert is_valid_email("userexample.com") == False
 
 
-def test_valid_with_dots():
-    assert is_valid_email("user.name@example.co.uk") == True
+class TestEdgeCases:
+    """Test edge cases and boundary conditions."""
 
+    def test_empty_string(self):
+        """Test with empty input."""
+        assert is_valid_email("") == False
 
-def test_invalid_no_at():
-    assert is_valid_email("userexample.com") == False
+    def test_empty_username(self):
+        """Test with nothing before @."""
+        assert is_valid_email("@example.com") == False
 
+    def test_no_domain_dot(self):
+        """Test domain without dot."""
+        assert is_valid_email("user@examplecom") == False
 
-def test_invalid_no_domain_dot():
-    assert is_valid_email("user@examplecom") == False
-
-
-def test_invalid_empty_username():
-    assert is_valid_email("@example.com") == False
-
-
-def test_invalid_spaces():
-    assert is_valid_email("user @example.com") == False
+    def test_spaces_in_email(self):
+        """Test email containing spaces."""
+        assert is_valid_email("user @example.com") == False
 ```
 
 ---
@@ -80,11 +94,9 @@ def test_invalid_spaces():
 """
 Transaction Grouper
 
-You're building a financial dashboard. Users want to see their transactions
-grouped by category, with totals calculated for each group.
-
-Given a list of transactions (each with amount, category, and date),
-return a dictionary grouping transactions by category with their total.
+You're building a financial dashboard for a budgeting app. Users want
+to see their spending grouped by category with totals, so they can
+understand where their money is going each month.
 
 Example 1:
     Input: transactions = [
@@ -101,67 +113,85 @@ Example 2:
     Explanation: No transactions means empty result
 
 Constraints:
-    - Each transaction has "amount" (positive int), "category" (string), "date" (string)
+    - Each transaction has "amount" (positive int), "category" (str), "date" (str)
     - Categories are case-sensitive
     - Return categories in any order
+    - Amount is always positive
 """
 
 
 def group_transactions(transactions: list[dict]) -> dict[str, int]:
-    """Return dictionary mapping category to total amount."""
+    """Return dictionary mapping each category to its total amount."""
     pass  # Your implementation here
 ```
 
 **tests.py**:
 ```python
+"""Tests for group-transactions."""
 import pytest
 from solution import group_transactions
 
 
-def test_multiple_categories():
-    txns = [
-        {"amount": 50, "category": "food", "date": "2024-01-01"},
-        {"amount": 30, "category": "food", "date": "2024-01-02"},
-        {"amount": 100, "category": "transport", "date": "2024-01-01"}
-    ]
-    assert group_transactions(txns) == {"food": 80, "transport": 100}
+class TestBasicCases:
+    """Test basic functionality with typical inputs."""
+
+    def test_multiple_categories(self):
+        """Test grouping across different categories."""
+        txns = [
+            {"amount": 50, "category": "food", "date": "2024-01-01"},
+            {"amount": 30, "category": "food", "date": "2024-01-02"},
+            {"amount": 100, "category": "transport", "date": "2024-01-01"}
+        ]
+        assert group_transactions(txns) == {"food": 80, "transport": 100}
+
+    def test_single_category(self):
+        """Test all transactions in one category."""
+        txns = [
+            {"amount": 10, "category": "food", "date": "2024-01-01"},
+            {"amount": 20, "category": "food", "date": "2024-01-02"},
+            {"amount": 30, "category": "food", "date": "2024-01-03"}
+        ]
+        assert group_transactions(txns) == {"food": 60}
+
+    def test_single_transaction(self):
+        """Test with just one transaction."""
+        txns = [{"amount": 25, "category": "entertainment", "date": "2024-01-01"}]
+        assert group_transactions(txns) == {"entertainment": 25}
 
 
-def test_empty_list():
-    assert group_transactions([]) == {}
+class TestEdgeCases:
+    """Test edge cases and boundary conditions."""
 
+    def test_empty_list(self):
+        """Test with no transactions."""
+        assert group_transactions([]) == {}
 
-def test_single_transaction():
-    txns = [{"amount": 25, "category": "entertainment", "date": "2024-01-01"}]
-    assert group_transactions(txns) == {"entertainment": 25}
+    def test_case_sensitive_categories(self):
+        """Test that categories are case-sensitive."""
+        txns = [
+            {"amount": 10, "category": "Food", "date": "2024-01-01"},
+            {"amount": 20, "category": "food", "date": "2024-01-02"}
+        ]
+        result = group_transactions(txns)
+        assert result == {"Food": 10, "food": 20}
 
+    def test_many_categories(self):
+        """Test with many different categories."""
+        txns = [
+            {"amount": 1, "category": "a", "date": "2024-01-01"},
+            {"amount": 2, "category": "b", "date": "2024-01-01"},
+            {"amount": 3, "category": "c", "date": "2024-01-01"},
+            {"amount": 4, "category": "d", "date": "2024-01-01"}
+        ]
+        assert group_transactions(txns) == {"a": 1, "b": 2, "c": 3, "d": 4}
 
-def test_single_category_multiple_transactions():
-    txns = [
-        {"amount": 10, "category": "food", "date": "2024-01-01"},
-        {"amount": 20, "category": "food", "date": "2024-01-02"},
-        {"amount": 30, "category": "food", "date": "2024-01-03"}
-    ]
-    assert group_transactions(txns) == {"food": 60}
-
-
-def test_case_sensitive_categories():
-    txns = [
-        {"amount": 10, "category": "Food", "date": "2024-01-01"},
-        {"amount": 20, "category": "food", "date": "2024-01-02"}
-    ]
-    result = group_transactions(txns)
-    assert result == {"Food": 10, "food": 20}
-
-
-def test_many_categories():
-    txns = [
-        {"amount": 1, "category": "a", "date": "2024-01-01"},
-        {"amount": 2, "category": "b", "date": "2024-01-01"},
-        {"amount": 3, "category": "c", "date": "2024-01-01"},
-        {"amount": 4, "category": "d", "date": "2024-01-01"}
-    ]
-    assert group_transactions(txns) == {"a": 1, "b": 2, "c": 3, "d": 4}
+    def test_large_amounts(self):
+        """Test with large transaction amounts."""
+        txns = [
+            {"amount": 1000000, "category": "salary", "date": "2024-01-01"},
+            {"amount": 500000, "category": "salary", "date": "2024-02-01"}
+        ]
+        assert group_transactions(txns) == {"salary": 1500000}
 ```
 
 ---
@@ -173,164 +203,161 @@ def test_many_categories():
 """
 Rate Limiter
 
-You're building an API gateway that needs to prevent abuse. Implement a
-rate limiter that tracks requests per user and enforces limits using
-a sliding window algorithm.
+You're building an API gateway for a SaaS platform. To prevent abuse
+and ensure fair usage, you need to implement a rate limiter that tracks
+requests per user using a sliding window algorithm.
 
-The rate limiter should allow at most `max_requests` per user within
-any `window_seconds` time period.
+The limiter should allow at most `max_requests` per user within any
+`window_seconds` time period.
 
 Example 1:
     limiter = RateLimiter(max_requests=3, window_seconds=60)
     limiter.allow_request("user1", timestamp=0)   # True (1st request)
     limiter.allow_request("user1", timestamp=30)  # True (2nd request)
     limiter.allow_request("user1", timestamp=45)  # True (3rd request)
-    limiter.allow_request("user1", timestamp=50)  # False (4th in 60s window)
-    limiter.allow_request("user1", timestamp=61)  # True (1st request expired)
+    limiter.allow_request("user1", timestamp=50)  # False (limit reached)
+    limiter.allow_request("user1", timestamp=61)  # True (1st expired)
 
 Example 2:
     limiter = RateLimiter(max_requests=2, window_seconds=10)
     limiter.allow_request("user1", timestamp=0)   # True
     limiter.allow_request("user2", timestamp=0)   # True (different user)
     limiter.allow_request("user1", timestamp=5)   # True
-    limiter.allow_request("user1", timestamp=8)   # False (limit reached)
+    limiter.allow_request("user1", timestamp=8)   # False
 
 Constraints:
     - max_requests >= 1
     - window_seconds >= 1
-    - timestamps are non-negative integers (seconds)
-    - timestamps are always non-decreasing for a given user
+    - Timestamps are non-negative integers (seconds)
+    - Timestamps are non-decreasing per user
     - user_id is a non-empty string
 """
 
 
 class RateLimiter:
-    """Sliding window rate limiter."""
+    """Sliding window rate limiter for API request throttling."""
 
     def __init__(self, max_requests: int, window_seconds: int):
-        """Initialize rate limiter with request limit and time window."""
+        """Initialize with request limit and time window."""
         pass  # Your implementation here
 
     def allow_request(self, user_id: str, timestamp: int) -> bool:
-        """Return True if request is allowed, False if rate limited."""
+        """Return True if request allowed, False if rate limited."""
         pass  # Your implementation here
 
     def get_remaining(self, user_id: str, timestamp: int) -> int:
-        """Return number of remaining requests allowed for user."""
+        """Return remaining requests allowed for user at timestamp."""
         pass  # Your implementation here
 ```
 
 **tests.py**:
 ```python
+"""Tests for rate-limiter."""
 import pytest
 from solution import RateLimiter
 
 
-def test_basic_allow():
-    limiter = RateLimiter(max_requests=3, window_seconds=60)
-    assert limiter.allow_request("user1", 0) == True
-    assert limiter.allow_request("user1", 30) == True
-    assert limiter.allow_request("user1", 45) == True
+class TestBasicCases:
+    """Test basic functionality with typical inputs."""
+
+    def test_allow_within_limit(self):
+        """Test requests within the limit are allowed."""
+        limiter = RateLimiter(max_requests=3, window_seconds=60)
+        assert limiter.allow_request("user1", 0) == True
+        assert limiter.allow_request("user1", 30) == True
+        assert limiter.allow_request("user1", 45) == True
+
+    def test_block_over_limit(self):
+        """Test requests over limit are blocked."""
+        limiter = RateLimiter(max_requests=2, window_seconds=60)
+        assert limiter.allow_request("user1", 0) == True
+        assert limiter.allow_request("user1", 30) == True
+        assert limiter.allow_request("user1", 45) == False
+
+    def test_multiple_users_independent(self):
+        """Test each user has independent limits."""
+        limiter = RateLimiter(max_requests=1, window_seconds=60)
+        assert limiter.allow_request("user1", 0) == True
+        assert limiter.allow_request("user2", 0) == True
+        assert limiter.allow_request("user1", 30) == False
+        assert limiter.allow_request("user2", 30) == False
+
+    def test_get_remaining_basic(self):
+        """Test remaining count decreases with requests."""
+        limiter = RateLimiter(max_requests=3, window_seconds=60)
+        assert limiter.get_remaining("user1", 0) == 3
+        limiter.allow_request("user1", 0)
+        assert limiter.get_remaining("user1", 0) == 2
 
 
-def test_rate_limit_exceeded():
-    limiter = RateLimiter(max_requests=2, window_seconds=60)
-    assert limiter.allow_request("user1", 0) == True
-    assert limiter.allow_request("user1", 30) == True
-    assert limiter.allow_request("user1", 45) == False
+class TestEdgeCases:
+    """Test edge cases and boundary conditions."""
 
+    def test_window_expiration(self):
+        """Test old requests expire from window."""
+        limiter = RateLimiter(max_requests=2, window_seconds=60)
+        assert limiter.allow_request("user1", 0) == True
+        assert limiter.allow_request("user1", 30) == True
+        assert limiter.allow_request("user1", 45) == False
+        assert limiter.allow_request("user1", 61) == True
 
-def test_window_expiration():
-    limiter = RateLimiter(max_requests=2, window_seconds=60)
-    assert limiter.allow_request("user1", 0) == True
-    assert limiter.allow_request("user1", 30) == True
-    assert limiter.allow_request("user1", 45) == False
-    assert limiter.allow_request("user1", 61) == True  # First request expired
+    def test_single_request_limit(self):
+        """Test with limit of 1 request."""
+        limiter = RateLimiter(max_requests=1, window_seconds=10)
+        assert limiter.allow_request("user1", 0) == True
+        assert limiter.allow_request("user1", 5) == False
+        assert limiter.allow_request("user1", 11) == True
 
+    def test_new_user_full_allowance(self):
+        """Test new users start with full allowance."""
+        limiter = RateLimiter(max_requests=5, window_seconds=60)
+        limiter.allow_request("user1", 0)
+        assert limiter.get_remaining("new_user", 20) == 5
 
-def test_multiple_users_independent():
-    limiter = RateLimiter(max_requests=1, window_seconds=60)
-    assert limiter.allow_request("user1", 0) == True
-    assert limiter.allow_request("user2", 0) == True
-    assert limiter.allow_request("user1", 30) == False
-    assert limiter.allow_request("user2", 30) == False
+    def test_remaining_after_expiration(self):
+        """Test remaining increases as requests expire."""
+        limiter = RateLimiter(max_requests=2, window_seconds=60)
+        limiter.allow_request("user1", 0)
+        limiter.allow_request("user1", 30)
+        assert limiter.get_remaining("user1", 30) == 0
+        assert limiter.get_remaining("user1", 61) == 1
 
+    def test_rapid_same_timestamp(self):
+        """Test multiple requests at same timestamp."""
+        limiter = RateLimiter(max_requests=3, window_seconds=1)
+        assert limiter.allow_request("user1", 0) == True
+        assert limiter.allow_request("user1", 0) == True
+        assert limiter.allow_request("user1", 0) == True
+        assert limiter.allow_request("user1", 0) == False
 
-def test_get_remaining():
-    limiter = RateLimiter(max_requests=3, window_seconds=60)
-    assert limiter.get_remaining("user1", 0) == 3
-    limiter.allow_request("user1", 0)
-    assert limiter.get_remaining("user1", 0) == 2
-    limiter.allow_request("user1", 30)
-    assert limiter.get_remaining("user1", 30) == 1
-
-
-def test_get_remaining_after_expiration():
-    limiter = RateLimiter(max_requests=2, window_seconds=60)
-    limiter.allow_request("user1", 0)
-    limiter.allow_request("user1", 30)
-    assert limiter.get_remaining("user1", 30) == 0
-    assert limiter.get_remaining("user1", 61) == 1  # First expired
-
-
-def test_single_request_limit():
-    limiter = RateLimiter(max_requests=1, window_seconds=10)
-    assert limiter.allow_request("user1", 0) == True
-    assert limiter.allow_request("user1", 5) == False
-    assert limiter.allow_request("user1", 10) == False
-    assert limiter.allow_request("user1", 11) == True
-
-
-def test_new_user_has_full_allowance():
-    limiter = RateLimiter(max_requests=5, window_seconds=60)
-    limiter.allow_request("user1", 0)
-    limiter.allow_request("user1", 10)
-    assert limiter.get_remaining("new_user", 20) == 5
-
-
-def test_rapid_requests():
-    limiter = RateLimiter(max_requests=3, window_seconds=1)
-    assert limiter.allow_request("user1", 0) == True
-    assert limiter.allow_request("user1", 0) == True
-    assert limiter.allow_request("user1", 0) == True
-    assert limiter.allow_request("user1", 0) == False
+    def test_exact_window_boundary(self):
+        """Test behavior at exact window boundary."""
+        limiter = RateLimiter(max_requests=1, window_seconds=10)
+        assert limiter.allow_request("user1", 0) == True
+        assert limiter.allow_request("user1", 10) == False
+        assert limiter.allow_request("user1", 11) == True
 ```
 
 ---
 
-## Topic Ideas by Concept
+## Topic Quick Reference
 
 ### Arrays/Lists
-- Remove duplicates preserving order
-- Find pairs that sum to target
-- Merge sorted arrays
-- Rotate array by k positions
-- Find missing number in sequence
+- Frequency counting, deduplication, sliding window
+- Two pointers, rotation, merging sorted arrays
 
 ### Strings
-- Validate email/URL/phone format
-- Count word frequency
-- Find longest palindromic substring
-- Parse CSV line with quotes
-- Compress string (aaabbc -> a3b2c1)
+- Validation (email, URL, phone), parsing CSV/JSON
+- Pattern matching, compression, transformation
 
 ### Hash Maps
-- Group items by property
-- Find first non-repeating character
-- Two sum / three sum variations
-- LRU Cache implementation
-- Anagram grouping
+- Grouping by property, counting occurrences
+- Two sum variants, caching, anagram detection
 
 ### Classes/OOP
-- Shopping cart with discounts
-- Bank account with transaction history
-- Task scheduler with priorities
-- Event emitter / pub-sub
-- State machine implementation
+- Shopping cart, bank account, task scheduler
+- State machines, event systems, entity modeling
 
 ### Data Processing
-- Filter and transform records
-- Aggregate statistics
-- Merge overlapping intervals
-- Topological sort of dependencies
-- Pagination with cursor
+- Filter/map/reduce pipelines, aggregation
+- Interval merging, pagination, deduplication
