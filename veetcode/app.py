@@ -256,9 +256,14 @@ class ProblemListScreen(Screen):
             return
 
         for p in self.problems:
-            diff_char = {"easy": "Easy", "medium": "Medium", "hard": "Hard"}.get(p.difficulty, "?")
-            check = "✓ " if p.name in self.solved else "  "
-            ol.add_option(Option(f"{check}[{diff_char}] {p.name}", id=p.name))
+            diff_colors = {
+                "easy": "[green]Easy[/green]",
+                "medium": "[yellow]Medium[/yellow]",
+                "hard": "[red]Hard[/red]",
+            }
+            diff = diff_colors.get(p.difficulty, "?")
+            check = "[green]✓[/green] " if p.name in self.solved else "  "
+            ol.add_option(Option(f"{check}{diff} {p.name}", id=p.name))
 
     def action_rescan(self) -> None:
         self.load_problems()
