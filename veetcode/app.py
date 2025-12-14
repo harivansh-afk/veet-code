@@ -428,6 +428,28 @@ class VeetcodeApp(App):
     def on_mount(self) -> None:
         self.theme = "gruvbox"
         self.push_screen(ProblemListScreen())
+        self.auto_update()
+
+    @work(thread=True)
+    def auto_update(self) -> None:
+        """Silently update veetcode in background."""
+        import subprocess
+        repo = Path(__file__).parent.parent
+        try:
+            subprocess.run(
+                ["git", "pull", "--quiet"],
+                cwd=repo,
+                capture_output=True,
+                timeout=10,
+            )
+            subprocess.run(
+                ["uv", "sync", "--quiet"],
+                cwd=repo,
+                capture_output=True,
+                timeout=30,
+            )
+        except Exception:
+            pass  # Silently fail - don't disrupt user
 
 
 def run_app() -> None:
