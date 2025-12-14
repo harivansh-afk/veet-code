@@ -20,7 +20,6 @@ uv.lock
 *.swo
 
 # Project specific
-problems/
 .solved.json
 
 # OS
