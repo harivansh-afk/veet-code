@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-REPO="harivansh-afk/veetcode"
+REPO="harivansh-afk/veet-code"
 INSTALL_DIR="$HOME/.veetcode"
 
 echo "Installing veetcode..."

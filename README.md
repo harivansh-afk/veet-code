@@ -9,7 +9,7 @@ Built for people vim users who enjoy claude code, ghostty panes and TUIs
 ## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/harivansh-afk/veetcode/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/harivansh-afk/veet-code/main/install.sh | bash
 ```
 
 Then run:
@@ -22,7 +22,7 @@ veet
 <summary>Manual install</summary>
 
 ```bash
-git clone https://github.com/harivansh-afk/veetcode.git
+git clone https://github.com/harivansh-afk/veet-code.git
 cd veetcode
 uv sync
 ./veet
