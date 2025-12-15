@@ -470,7 +470,17 @@ class WatchScreen(Screen):
         if result.output:
             # Add visual separators for readability
             out.write("[dim]─" * 60 + "[/dim]")
-            out.write(result.output)
+            # Add spacing between test case sections for readability
+            formatted_output = re.sub(
+                r"(\n)(_{10,})([^\n]+)(_{10,})",
+                r"\1\n\2\3\4",
+                result.output
+            )
+            # Replace ___ separators with ===
+            formatted_output = re.sub(r"_{3,}", lambda m: "=" * len(m.group()), formatted_output)
+            # Add blank line above "short test summary info"
+            formatted_output = re.sub(r"(\n)(=+ short test summary info =+)", r"\1\n\2", formatted_output)
+            out.write(formatted_output)
         else:
             out.write("No output")
 
