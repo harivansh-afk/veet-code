@@ -2,6 +2,7 @@
 
 Screen {
     background: $surface;
+    scrollbar-size: 1 1;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────── */
@@ -31,6 +32,7 @@ Screen {
 
 OptionList {
     scrollbar-gutter: stable;
+    scrollbar-size: 1 1;
 }
 
 OptionList:focus {
@@ -92,6 +94,7 @@ OptionList > .option-list--option-highlighted {
     height: 1fr;
     padding: 0 1;
     overflow-y: auto;
+    scrollbar-size: 1 1;
 }
 
 #test-summary {
@@ -133,6 +136,7 @@ OptionList > .option-list--option-highlighted {
     border: solid $primary-muted;
     padding: 1;
     scrollbar-gutter: stable;
+    scrollbar-size: 1 1;
 }
 
 #output:focus {
@@ -142,4 +146,5 @@ OptionList > .option-list--option-highlighted {
 RichLog {
     overflow-x: hidden;
     text-wrap: wrap;
+    scrollbar-size: 1 1;
 }
