@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](#)
 [![Last Commit](https://img.shields.io/github/last-commit/harivansh-afk/veet-code)](https://github.com/harivansh-afk/veet-code/commits/main)
 [![Repo Size](https://img.shields.io/github/repo-size/harivansh-afk/veet-code)](https://github.com/harivansh-afk/veet-code)
-[![Release](https://img.shields.io/github/v/release/harivansh-afk/veet-code)](https://github.com/harivansh-afk/veet-code/releases)
+[![Release](https://img.shields.io/github/v/release/harivansh-afk/veet-code?display_name=release&sort=date)](https://github.com/harivansh-afk/veet-code/releases/latest)
 
 Built for vim users who enjoy claude code, ghostty panes and TUIs
 
