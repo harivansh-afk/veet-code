@@ -1,5 +1,10 @@
 # Veetcode
 
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue)](#)
+[![Last Commit](https://img.shields.io/github/last-commit/harivansh-afk/veet-code)](https://github.com/harivansh-afk/veet-code/commits/main)
+[![Repo Size](https://img.shields.io/github/repo-size/harivansh-afk/veet-code)](https://github.com/harivansh-afk/veet-code)
+[![Release](https://img.shields.io/github/v/release/harivansh-afk/veet-code)](https://github.com/harivansh-afk/veet-code/releases)
+
 Built for vim users who enjoy claude code, ghostty panes and TUIs
 
 <img width="1800" height="1169" alt="image" src="https://github.com/user-attachments/assets/d28c2acb-edcb-4d14-8155-e09d65d14a6b" />
